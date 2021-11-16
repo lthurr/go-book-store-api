@@ -36,7 +36,7 @@ func (b *Books) AddBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//validate the request
-	if req.Name == nil || req.Image == nil || req.ISBN == nil || req.Prices.OldPrice == nil || req.Prices.NewPrice == nil || req.Language == nil || req.PublisherId == nil || req.PublishedAt == nil || req.BookGenre.Id == nil || req.BookAuthor.Id == nil || req.Other.Quantity == nil || req.Other.Type == nil || req.Other.NumberPages == nil {
+	if req.Name == nil || len(*req.Name) == 0 || req.Image == nil || req.ISBN == nil || req.Prices.OldPrice == nil || req.Prices.NewPrice == nil || req.Language == nil || req.PublisherId == nil || req.PublishedAt == nil || req.BookGenre.Id == nil || req.BookAuthor.Id == nil {
 		handler.HttpError(w, http.StatusBadRequest, hc.BAD_REQUEST, err)
 		return
 	}
@@ -61,7 +61,7 @@ func (b *Books) UpdateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//validate the request
-	if req.Id == 0 || req.Image == nil || req.Status == nil || req.Name == nil || req.ISBN == nil || req.Prices.OldPrice == nil || req.Prices.NewPrice == nil || req.Language == nil || req.PublisherId == nil || req.PublishedAt == nil || req.BookGenre.Id == nil || req.BookAuthor.Id == nil || req.Other.Quantity == nil || req.Other.Type == nil || req.Other.NumberPages == nil {
+	if req.Id == 0 || req.Image == nil || req.Status == nil || req.Name == nil || req.ISBN == nil || req.Prices.OldPrice == nil || req.Prices.NewPrice == nil || req.Language == nil || req.PublisherId == nil || req.PublishedAt == nil || req.BookGenre.Id == nil || req.BookAuthor.Id == nil {
 		handler.HttpError(w, http.StatusBadRequest, hc.BAD_REQUEST, err)
 		return
 	}
@@ -88,6 +88,10 @@ func (b *Books) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	}
 	res, err := b.bookRepo.Delete(r.Context(), id)
 	if err != nil {
+		if err == models.ErrNotFound {
+			handler.HttpError(w, http.StatusNotFound, hc.NOT_FOUND, err.Error())
+			return
+		}
 		handler.HttpError(w, http.StatusInternalServerError, err.Error(), err.Error())
 		return
 	}
@@ -108,6 +112,10 @@ func (b *Books) GetOne(w http.ResponseWriter, r *http.Request) {
 	}
 	res, err := b.bookRepo.GetBookDetailById(r.Context(), id)
 	if err != nil {
+		if err == models.ErrNotFound {
+			handler.HttpError(w, http.StatusNotFound, hc.NOT_FOUND, err.Error())
+			return
+		}
 		handler.HttpError(w, http.StatusInternalServerError, err.Error(), err.Error())
 		return
 	}

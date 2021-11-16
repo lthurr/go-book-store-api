@@ -44,10 +44,10 @@ func handleAppRoutes(r *mux.Router, db *driver.DB) {
 	v1.Handle("/author", mw.JWTAuthMiddleware(http.HandlerFunc(authorhandler.UpdateAuthor))).Methods(http.MethodPut)
 
 	//Book Routes
-	v1.Handle("/book", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.AddBook))).Methods(http.MethodGet)
-	v1.Handle("/book", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.UpdateBook))).Methods(http.MethodGet)
+	v1.Handle("/book", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.AddBook))).Methods(http.MethodPost)
+	v1.Handle("/book", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.UpdateBook))).Methods(http.MethodPut)
 	v1.Handle("/book/{id}", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.DeleteBook))).Methods(http.MethodDelete)
-	v1.Handle("/book/all", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.GetAll))).Methods(http.MethodGet)
+	v1.Handle("/books", mw.JWTAuthMiddleware(http.HandlerFunc(bookHandler.GetAll))).Methods(http.MethodGet)
 	//Jwt Authentication middleware
 	v1.HandleFunc("/book/{id}", bookHandler.GetOne).Methods(http.MethodGet)
 	v1.HandleFunc("/book/search", bookHandler.SearchBook).Methods(http.MethodGet)

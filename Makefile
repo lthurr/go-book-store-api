@@ -1,7 +1,5 @@
 .DEFAULT_GOAL=build
 
-PROJECT?=$(shell basename $(shell pwd))
-
 GO_BUILD_DIR=build
 .PHONY: build
 
@@ -14,7 +12,7 @@ run:
 				make clean
 				make build
 				cd $(GO_BUILD_DIR)
-				./$(GO_BUILD_DIR)/$(PROJECT)
+				./$(GO_BUILD_DIR)/book-store-api
 
 
 

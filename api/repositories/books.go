@@ -161,7 +161,7 @@ func (b *BookRepo) GetBookDetailById(ctx context.Context, id int64) ([]*models.B
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return payload, nil
+			return nil, models.ErrNotFound
 		}
 		return nil, err
 	}
